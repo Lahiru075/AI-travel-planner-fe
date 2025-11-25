@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 const Signup = lazy(() => import('../page/signup'))
 const Login = lazy(() => import('../page/login'))
+const Userdashboard = lazy(() => import('../page/userdashboard'))
 
 function index() {
   return (
@@ -11,6 +12,7 @@ function index() {
             <Routes>
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/login" element={<Login/>}/>
+                <Route path="/userdashboard" element={<Userdashboard/>}/>
             </Routes>
         </Suspense>
     </BrowserRouter>

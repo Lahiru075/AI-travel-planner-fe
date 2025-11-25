@@ -1,9 +1,13 @@
 import React from 'react'
 import Router from './routes'
+import { AuthProvider } from './context/authContext'
 
 function App() {
   return (
-    <Router/>
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
+
   )
 }
 

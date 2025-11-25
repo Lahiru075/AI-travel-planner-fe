@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import travelBg from "../assets/tejas-kotha-ZsaQMa-cQtw-unsplash.jpg";
-import { signin } from "../service/user"; 
+import { getMyDetails, signin } from "../service/user"; 
+import { useAuth } from "../context/authContext";
 
 const login = () => {
 
     const navigate = useNavigate();
+    const {user , setUser} = useAuth()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -24,7 +26,10 @@ const login = () => {
             await localStorage.setItem("accessToken", res.data.accessToken);
             await localStorage.setItem("refreshToken", res.data.refreshToken);
 
+
             // add data to context
+            const details = await getMyDetails();
+            setUser(details.data);
 
             alert("Login Successful! Welcome back 👋");
 

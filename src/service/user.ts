@@ -15,3 +15,13 @@ export const signin = async (data: any) => {
     const res = await api.post("/users/login", data)
     return res.data
 }
+
+export const getMyDetails = async () => {
+    const res = await api.get('/users/getMyDetails')
+    return res.data
+}
+
+export const refreshTokens = async (refreshToken: string) => {
+    const res = await api.post('/users/refresh', { token: refreshToken })
+    return res.data
+}
