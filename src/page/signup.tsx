@@ -60,7 +60,7 @@ const signup = () => {
                     <div className="absolute inset-0  bg-opacity-20"></div>
                     <div className="relative z-10 flex flex-col justify-end p-8 text-white">
                         <h1 className="text-3xl font-bold mb-2">Explore the World 🌍</h1>
-                        <p className="text-sm text-gray-200">
+                        <p className="text-sm font-semibold text-gray-200">
                             Join thousands of travelers creating their dream trips with AI.
                         </p>
                     </div>

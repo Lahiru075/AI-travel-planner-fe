@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import travelBg from "../assets/tejas-kotha-ZsaQMa-cQtw-unsplash.jpg";
+import travelBg from "../assets/pexels-chiecharon-913215.jpg";
 import { getMyDetails, signin } from "../service/user"; 
 import { useAuth } from "../context/authContext";
 
@@ -58,7 +58,7 @@ const login = () => {
                     <div className="absolute inset-0  bg-opacity-30"></div>
                     <div className="relative z-10 flex flex-col justify-end p-8 text-white">
                         <h1 className="text-3xl font-bold mb-2">Welcome Back! ✈️</h1>
-                        <p className="text-sm text-gray-200">
+                        <p className="text-sm font-semibold text-gray-200">
                             Ready to plan your next adventure? Log in to access your saved trips.
                         </p>
                     </div>
