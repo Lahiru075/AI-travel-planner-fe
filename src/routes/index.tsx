@@ -9,6 +9,8 @@ const Userdashboard = lazy(() => import('../page/userdashboard'))
 const Admindashboard = lazy(() => import('../page/admindashboard'))
 const Createtrip = lazy(() => import('../page/createtrip'))
 const TripHistory = lazy(() => import('../page/triphistory'))
+const ViewTrip = lazy(() => import('../page/viewtrip'))
+const HomePage = lazy(() => import('../page/homepage'))
 
 type RequireAuthType = { children: ReactNode, role?: string[] }
 
@@ -42,6 +44,7 @@ function index() {
     <BrowserRouter>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
 
@@ -50,6 +53,8 @@ function index() {
             <Route path="/userdashboard" element={<Userdashboard />} />
 
             <Route path='/createtrip' element={<Createtrip />} />
+
+            <Route path='/viewtrip/:id' element={<ViewTrip />} />
 
             <Route
               path="/admindashboard"

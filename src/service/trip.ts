@@ -18,12 +18,22 @@ export const saveTrip = async (data: any) => {
     return res.data
 }
 
-export const getMyTrips = async () => {
-    const res = await api.get('/trips/mytrips')
+export const getMyTrips = async (page: number, limit: number) => {
+    const res = await api.get(`/trips/mytrips?page=${page}&limit=${limit}`)
     return res.data
 }
 
 export const deleteTrip = async (id: string) => {
     const res = await api.delete(`/trips/delete/${id}`)
+    return res.data
+}
+
+export const getTripById = async (id: string) => {
+    const res = await api.get(`/trips/viewtrip/${id}`)
+    return res.data
+}
+
+export const getImage = async (query: string) => {
+    const res = await api.post('/trips/getimage', { query: query })
     return res.data
 }
