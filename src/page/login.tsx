@@ -31,11 +31,18 @@ const Login = () => {
             await localStorage.setItem("refreshToken", res.data.refreshToken);
 
             const details = await getMyDetails();
+            
+            if (details.data.status == "SUSPEND") {
+                enqueueSnackbar('Please activate your account first!', { variant: 'error' });
+                setLoading(false);
+                return;
+            }
+
             setUser(details.data);
 
             enqueueSnackbar('User logged in successfully!', { variant: 'success' });
 
-            if (res.data.role === "ADMIN") {
+            if (res.data.role == "ADMIN") {
                 navigate("/admindashboard");
             } else {
                 navigate("/userdashboard");

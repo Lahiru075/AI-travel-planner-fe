@@ -68,8 +68,6 @@ const CreateTrip = () => {
                 travelers: travelers,
                 tripData: tripData
             };
-
-            console.log(data);
             
             await saveTrip(data);
             enqueueSnackbar('Trip saved successfully!', { variant: 'success' });

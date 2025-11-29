@@ -11,6 +11,7 @@ const Createtrip = lazy(() => import('../page/createtrip'))
 const TripHistory = lazy(() => import('../page/triphistory'))
 const ViewTrip = lazy(() => import('../page/viewtrip'))
 const HomePage = lazy(() => import('../page/homepage'))
+const AdminLayout = lazy(() => import('../components/AdminLayout'))
 
 type RequireAuthType = { children: ReactNode, role?: string[] }
 
@@ -27,13 +28,21 @@ const RequireAuth = ({ children, role }: RequireAuthType) => {
 
 
   if (role && !role.some((role) => user.role?.includes(role))) {
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 text-white flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold mb-2">Access denied</h2>
-        <p className="text-gray-300">You do not have permission to view this page</p>
+      // 👇 මෙතන වෙනස් කළා: fixed inset-0 z-50 දැම්මා
+      <div className="fixed inset-0 z-50 min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center">
+
+        {/* Icon (Optional - ලස්සනට පේන්න) */}
+        <div className="bg-red-500/10 p-4 rounded-full mb-4">
+          <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        </div>
+
+        <h2 className="text-3xl font-bold mb-2">Access Denied</h2>
+        <p className="text-slate-400">You do not have permission to view this page.</p>
+
       </div>
     )
-
   }
 
   return <>{children}</>
@@ -48,14 +57,7 @@ function index() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
 
-          <Route element={<RequireAuth><Layout /></RequireAuth>}>
-
-            <Route path="/userdashboard" element={<Userdashboard />} />
-
-            <Route path='/createtrip' element={<Createtrip />} />
-
-            <Route path='/viewtrip/:id' element={<ViewTrip />} />
-
+          <Route element={<RequireAuth><AdminLayout /></RequireAuth>}>
             <Route
               path="/admindashboard"
               element={
@@ -64,8 +66,44 @@ function index() {
                 </RequireAuth>
               }
             />
+          </Route>
 
-            <Route path='/triphistory' element={<TripHistory />} />
+          <Route element={<RequireAuth><Layout /></RequireAuth>}>
+
+            <Route
+              path="/userdashboard"
+              element={
+                <RequireAuth role={["USER"]}>
+                  <Userdashboard />
+                </RequireAuth>
+              }
+            />
+
+            <Route path='/createtrip'
+              element={
+                <RequireAuth role={["USER"]}>
+                  <Createtrip />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path='/viewtrip/:id'
+              element={
+                <RequireAuth role={["USER"]}>
+                  <ViewTrip />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path='/triphistory'
+              element={
+                <RequireAuth role={["USER"]}>
+                  <TripHistory />
+                </RequireAuth>
+              }
+            />
 
           </Route>
         </Routes>

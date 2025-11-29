@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getImage, getTripById } from "../service/trip";
+import { getImage, getTripById, getWeather } from "../service/trip";
 
 const ViewTrip = () => {
     const { id } = useParams();
     const [trip, setTrip] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [headerImage, setHeaderImage] = useState("");
-
+    const [weather, setWeather] = useState<any>(null);
 
     useEffect(() => {
         const fetchTrip = async () => {
@@ -17,6 +17,7 @@ const ViewTrip = () => {
 
                 if (res.data.destination) {
                     GetPlacePhoto(res.data.destination);
+                    fetchWeather(res.data.destination);
                 }
 
             } catch (error) {
@@ -40,6 +41,49 @@ const ViewTrip = () => {
         }
     };
 
+
+    const fetchWeather = async (location: string) => {
+        try {
+            const city = location.split(",")[0];
+            const res = await getWeather(city);
+            setWeather(res);
+        } catch (error) {
+            console.log("Weather fetch failed");
+        }
+    };
+
+    const getPackingTip = (condition: string, temp: number) => {
+        const lowerCond = condition.toLowerCase();
+
+        if (lowerCond.includes("rain") || lowerCond.includes("drizzle") || lowerCond.includes("thunderstorm")) {
+            return "☔ It's rainy! Make sure to take an umbrella or a raincoat.";
+        }
+
+        if (lowerCond.includes("snow")) {
+            return "🧥 Snowy weather! Carry a thick jacket and gloves.";
+        }
+
+        if (lowerCond.includes("clear") || lowerCond.includes("sunny")) {
+            if (temp > 30) {
+                return "🥵 It's very hot! Bring sunscreen, a hat, and a water bottle.";
+            }
+            return "😎 Perfect weather for outdoor activities!";
+        }
+
+        if (lowerCond.includes("clouds")) {
+            if (temp < 20) {
+                return "☁️ It's cloudy and a bit cold. A light jacket is recommended.";
+            }
+            return "🌤️ Cloudy but fine. Wear comfortable shoes.";
+        }
+
+        if (temp < 15) return "🧣 It's cold. Wear warm clothes.";
+        if (temp > 28) return "☀️ Hot weather. Wear light clothing.";
+
+        return "🎒 Pack your standard travel essentials.";
+    };
+
+
     const handlePrint = () => {
         window.print();
     };
@@ -54,26 +98,22 @@ const ViewTrip = () => {
 
             <div className="max-w-5xl mx-auto relative z-10 animate-fade-in-up">
 
-
                 <div className="flex justify-between items-center mb-6">
                     <div></div>
 
-                    {/* Download Button */}
                     <button
                         onClick={handlePrint}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-all shadow-sm active:scale-95"
+                        className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-all shadow-sm active:scale-95 print:hidden"
                     >
                         <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         Download PDF
                     </button>
                 </div>
 
+                <div className="relative overflow-hidden rounded-3xl border border-slate-800 p-8 md:p-12 mb-12 text-center shadow-2xl min-h-[450px] flex flex-col justify-center items-center group">
 
-                <div className="relative overflow-hidden rounded-3xl border border-slate-800 p-8 md:p-12 mb-12 text-center shadow-2xl h-[400px] flex flex-col justify-center items-center">
-
-                    {/* Dynamic Image Background */}
                     <div
-                        className="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-all duration-1000"
+                        className="absolute top-0 left-0 w-full h-full bg-cover bg-center transition-all duration-1000 group-hover:scale-105"
                         style={{
                             backgroundImage: `url(${headerImage || 'https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg'})`
                         }}
@@ -81,12 +121,12 @@ const ViewTrip = () => {
 
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
 
-                    {/* Text Content */}
-                    <div className="relative z-10">
+                    <div className="relative z-10 w-full">
                         <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl tracking-tight">
                             {trip.destination}
                         </h1>
-                        <div className="inline-flex gap-4 flex-wrap justify-center">
+
+                        <div className="inline-flex gap-4 flex-wrap justify-center mb-6">
                             <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium text-sm">
                                 📅 {trip.noOfDays} Days
                             </span>
@@ -97,13 +137,32 @@ const ViewTrip = () => {
                                 👥 {trip.travelers}
                             </span>
                         </div>
+
+                        {weather && (
+                            <div className="flex flex-col items-center animate-fade-in-up mt-4">
+                                <div className="flex items-center gap-4 bg-black/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 shadow-lg hover:bg-black/50 transition-colors">
+                                    <img
+                                        src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                                        alt="weather icon"
+                                        className="w-12 h-12"
+                                    />
+                                    <div className="text-left">
+                                        <p className="text-2xl font-bold text-white leading-none">{weather.temp}°C</p>
+                                        <p className="text-sm text-slate-300 capitalize">{weather.description}</p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 bg-gradient-to-r from-blue-600/90 to-cyan-600/90 px-5 py-2 rounded-full text-sm font-semibold text-white shadow-lg flex items-center gap-2 border border-white/20">
+                                    <span>💡</span> {getPackingTip(weather.condition, weather.temp)}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-
+                {/* Hotels Section */}
                 {tripDetails.hotels && (
                     <div className="mb-16">
-                        {/* ... hotels logic ... */}
                         <h3 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-3">
                             <span className="bg-blue-600/20 p-2 rounded-lg text-blue-400">🏨</span>
                             Where to Stay
@@ -119,8 +178,8 @@ const ViewTrip = () => {
                     </div>
                 )}
 
+                {/* Itinerary Section */}
                 <div className="relative">
-                    {/* ... itinerary logic ... */}
                     <h3 className="text-2xl font-bold text-slate-100 mb-8 flex items-center gap-3">
                         <span className="bg-cyan-600/20 p-2 rounded-lg text-cyan-400">📅</span>
                         Your Itinerary

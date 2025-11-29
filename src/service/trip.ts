@@ -37,3 +37,8 @@ export const getImage = async (query: string) => {
     const res = await api.post('/trips/getimage', { query: query })
     return res.data
 }
+
+export const getWeather = async (location: string) => {
+    const res = await api.post('/trips/get_weather', { location: location })
+    return res.data
+}
