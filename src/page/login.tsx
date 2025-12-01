@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import travelBg from "../assets/pexels-chiecharon-913215.jpg";
-import { getMyDetails, signin } from "../service/user"; 
+import { getMyDetails, googleAuth, signin } from "../service/user";
 import { useAuth } from "../context/authContext";
 import { useSnackbar } from 'notistack'
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
 
@@ -13,6 +14,48 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
+
+    // const handleLogin = async (e: FormEvent) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     if (!email || !password) {
+    //         enqueueSnackbar('Please fill in all fields!', { variant: 'error' });
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     try {
+    //         const res: any = await signin({ email, password });
+
+    //         await localStorage.setItem("accessToken", res.data.accessToken);
+    //         await localStorage.setItem("refreshToken", res.data.refreshToken);
+
+    //         const details = await getMyDetails();
+
+    //         if (details.data.status == "SUSPEND") {
+    //             enqueueSnackbar('Please activate your account first!', { variant: 'error' });
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         setUser(details.data);
+
+    //         enqueueSnackbar('User logged in successfully!', { variant: 'success' });
+
+    //         if (res.data.role == "ADMIN") {
+    //             navigate("/admindashboard");
+    //         } else {
+    //             navigate("/userdashboard");
+    //         }
+
+    //     } catch (error: any) {
+    //         console.log(error);
+    //         enqueueSnackbar(error.response?.data?.message || "Login Failed", { variant: 'error' });
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
@@ -26,39 +69,54 @@ const Login = () => {
 
         try {
             const res: any = await signin({ email, password });
-
-            await localStorage.setItem("accessToken", res.data.accessToken);
-            await localStorage.setItem("refreshToken", res.data.refreshToken);
-
-            const details = await getMyDetails();
-            
-            if (details.data.status == "SUSPEND") {
-                enqueueSnackbar('Please activate your account first!', { variant: 'error' });
-                setLoading(false);
-                return;
-            }
-
-            setUser(details.data);
-
-            enqueueSnackbar('User logged in successfully!', { variant: 'success' });
-
-            if (res.data.role == "ADMIN") {
-                navigate("/admindashboard");
-            } else {
-                navigate("/userdashboard");
-            }
-
+            await processLogin(res);
         } catch (error: any) {
             console.log(error);
             enqueueSnackbar(error.response?.data?.message || "Login Failed", { variant: 'error' });
-        } finally {
             setLoading(false);
         }
     };
 
+    const handleGoogleLogin = async (credentialResponse: any) => {
+        setLoading(true);
+        try {
+            const token = credentialResponse.credential;
+            const res: any = await googleAuth(token);
+            await processLogin(res);
+        } catch (error: any) {
+            console.error("Google Login Error", error);
+            enqueueSnackbar(error.response?.data?.message || "Google Login Failed", { variant: 'error' });
+            setLoading(false);
+        }
+    };
+
+    const processLogin = async (res: any) => {
+        await localStorage.setItem("accessToken", res.data.accessToken);
+        await localStorage.setItem("refreshToken", res.data.refreshToken);
+
+        const details = await getMyDetails();
+
+        if (details.data.status === "SUSPEND") {
+            enqueueSnackbar('Your account is suspended!', { variant: 'error' });
+            setLoading(false);
+            return;
+        }
+
+        setUser(details.data);
+        enqueueSnackbar('Logged in successfully!', { variant: 'success' });
+
+        if (res.data.user?.role === "ADMIN" || details.data.role === "ADMIN") {
+            navigate("/admindashboard");
+        } else {
+            navigate("/userdashboard");
+        }
+        setLoading(false);
+    };
+
+
     return (
         // 1. FULL PAGE BACKGROUND SECTION
-        <div 
+        <div
             className="min-h-screen w-full flex items-center justify-center relative bg-cover bg-center bg-no-repeat font-sans"
             style={{ backgroundImage: `url(${travelBg})` }}
         >
@@ -67,10 +125,10 @@ const Login = () => {
 
             {/* 3. GLASS FORM CARD */}
             <div className="relative z-10 w-full max-w-lg p-8 m-3">
-                
+
                 {/* Glass Container */}
                 <div className="bg-black/30 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8 md:p-10">
-                    
+
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className="inline-block p-3 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-white/10 mb-4 shadow-lg shadow-blue-500/10">
@@ -128,6 +186,24 @@ const Login = () => {
                         </button>
                     </form>
 
+                    <div className="my-6 flex items-center gap-4">
+                        <div className="h-px bg-slate-700 flex-1"></div>
+                        <span className="text-slate-400 text-xs font-medium uppercase">Or continue with</span>
+                        <div className="h-px bg-slate-700 flex-1"></div>
+                    </div>
+
+                    <div className="flex justify-center">
+                        <GoogleLogin
+                            onSuccess={handleGoogleLogin}
+                            onError={() => enqueueSnackbar("Google Login Failed", { variant: 'error' })}
+                            theme="filled_black"
+                            shape="pill"
+                            size="large"
+                            width="100%"
+                            text="signin_with"
+                        />
+                    </div>
+
                     {/* Footer */}
                     <div className="mt-8 pt-6 border-t border-white/10 text-center">
                         <p className="text-slate-400 text-sm">
@@ -137,7 +213,6 @@ const Login = () => {
                             </Link>
                         </p>
                     </div>
-
                 </div>
             </div>
         </div>

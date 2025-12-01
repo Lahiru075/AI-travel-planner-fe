@@ -121,38 +121,38 @@ const ViewTrip = () => {
 
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
 
-                    <div className="relative z-10 w-full">
-                        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl tracking-tight">
+                    <div className="relative z-10 w-full print-force-white">
+                        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl tracking-tight print-force-white">
                             {trip.destination}
                         </h1>
 
                         <div className="inline-flex gap-4 flex-wrap justify-center mb-6">
-                            <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium text-sm">
+                            <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium text-sm print-force-white">
                                 📅 {trip.noOfDays} Days
                             </span>
-                            <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium text-sm">
+                            <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium text-sm print-force-white">
                                 💰 {trip.budget} Budget
                             </span>
-                            <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium text-sm">
+                            <span className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-white font-medium text-sm print-force-white">
                                 👥 {trip.travelers}
                             </span>
                         </div>
 
                         {weather && (
                             <div className="flex flex-col items-center animate-fade-in-up mt-4">
-                                <div className="flex items-center gap-4 bg-black/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 shadow-lg hover:bg-black/50 transition-colors">
+                                <div className="flex items-center gap-4 bg-black/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 shadow-lg hover:bg-black/50 transition-colors print-force-white">
                                     <img
                                         src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
                                         alt="weather icon"
                                         className="w-12 h-12"
                                     />
                                     <div className="text-left">
-                                        <p className="text-2xl font-bold text-white leading-none">{weather.temp}°C</p>
-                                        <p className="text-sm text-slate-300 capitalize">{weather.description}</p>
+                                        <p className="text-2xl font-bold text-white leading-none print-force-white">{weather.temp}°C</p>
+                                        <p className="text-sm text-slate-300 capitalize print-force-white">{weather.description}</p>
                                     </div>
                                 </div>
 
-                                <div className="mt-4 bg-gradient-to-r from-blue-600/90 to-cyan-600/90 px-5 py-2 rounded-full text-sm font-semibold text-white shadow-lg flex items-center gap-2 border border-white/20">
+                                <div className="mt-4 bg-gradient-to-r from-blue-600/90 to-cyan-600/90 px-5 py-2 rounded-full text-sm font-semibold text-white shadow-lg flex items-center gap-2 border border-white/20 print-force-white">
                                     <span>💡</span> {getPackingTip(weather.condition, weather.temp)}
                                 </div>
                             </div>
@@ -200,8 +200,9 @@ const ViewTrip = () => {
                                                 <span className="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-cyan-400 border border-slate-700">{place.time}</span>
                                             </div>
                                             <p className="text-slate-400 text-sm mt-1">{place.details}</p>
-                                            <p className="text-xs text-blue-400 font-semibold mt-2">
-                                                🎟️ {place.ticketPrice}
+                                            <p className="text-sm text-yellow-500 font-bold mt-2 flex items-center gap-2">
+                                                <span className="bg-orange-500/20 p-1 rounded">🎟️</span>
+                                                {place.ticketPrice}
                                             </p>
                                         </div>
                                     ))}
@@ -210,7 +211,6 @@ const ViewTrip = () => {
                         ))}
                     </div>
                 </div>
-
             </div>
         </div>
     );
