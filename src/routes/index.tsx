@@ -12,6 +12,9 @@ const TripHistory = lazy(() => import('../page/triphistory'))
 const ViewTrip = lazy(() => import('../page/viewtrip'))
 const HomePage = lazy(() => import('../page/homepage'))
 const AdminLayout = lazy(() => import('../components/AdminLayout'))
+const ForgotPassword = lazy(() => import('../page/forgetpassword'))
+const ResetPassword = lazy(() => import('../page/resetpassword'))
+
 
 type RequireAuthType = { children: ReactNode, role?: string[] }
 
@@ -54,6 +57,8 @@ function index() {
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
           <Route element={<RequireAuth><AdminLayout /></RequireAuth>}>
             <Route

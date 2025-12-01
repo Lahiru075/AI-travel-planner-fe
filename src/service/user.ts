@@ -30,3 +30,11 @@ export const googleAuth = async (token: string) => {
     const res = await api.post('/users/google_login', { token });
     return res.data
 };
+
+export const forgotPasswordRequest = async (email: string) => {
+    return await api.post('/users/forgot-password', { email });
+};
+
+export const resetPasswordRequest = async (token: string, password: string) => {
+    return await api.post(`/users/reset-password/${token}`, { password });
+};

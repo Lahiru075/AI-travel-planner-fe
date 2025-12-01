@@ -170,6 +170,10 @@ const Login = () => {
                             </div>
                         </div>
 
+                        <div className="text-right">
+                            <Link to="/forgot-password" className="text-sm text-cyan-400 hover:underline">Forgot Password?</Link>
+                        </div>
+
                         {/* Login Button */}
                         <button
                             onClick={handleLogin}
