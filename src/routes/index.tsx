@@ -22,7 +22,7 @@ const RequireAuth = ({ children, role }: RequireAuthType) => {
   const { user, loading } = useAuth()
 
   if (loading) {
-    return <div>Loading...</div>
+    return
   }
 
   if (!user) {
@@ -52,7 +52,15 @@ const RequireAuth = ({ children, role }: RequireAuthType) => {
 function index() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={
+        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950">
+          {/* Spinner with Glow */}
+          <div className="w-16 h-16 border-4 border-slate-800 border-t-cyan-400 rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.3)]"></div>
+
+          {/* Loading Text */}
+          <p className="mt-4 text-slate-400 text-sm font-medium animate-pulse">Loading...</p>
+        </div>
+      }>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<Signup />} />

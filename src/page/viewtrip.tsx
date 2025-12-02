@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getImage, getTripById, getWeather } from "../service/trip";
+import RouteMap from "../components/routermap";
 
 const ViewTrip = () => {
     const { id } = useParams();
@@ -14,6 +15,8 @@ const ViewTrip = () => {
             try {
                 const res = await getTripById(id!);
                 setTrip(res.data);
+
+                console.log(res.data.tripData.itinerary)
 
                 if (res.data.destination) {
                     GetPlacePhoto(res.data.destination);
@@ -211,6 +214,9 @@ const ViewTrip = () => {
                         ))}
                     </div>
                 </div>
+                {tripDetails.itinerary && (
+                    <RouteMap itinerary={tripDetails.itinerary} />
+                )}
             </div>
         </div>
     );

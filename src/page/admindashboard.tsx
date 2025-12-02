@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { getStats, getAllUsers, getAllTrips, suspendUser, activateUser, deleteTrip } from "../service/admin";
+import { getStats } from "../service/admin";
 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { activateUser, getAllUsers, suspendUser } from "../service/user";
+import { deleteTrip, getAllTrips } from "../service/trip";
 
 
 const AdminDashboard = () => {

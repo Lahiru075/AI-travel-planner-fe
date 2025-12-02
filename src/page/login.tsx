@@ -105,7 +105,7 @@ const Login = () => {
         setUser(details.data);
         enqueueSnackbar('Logged in successfully!', { variant: 'success' });
 
-        if (res.data.user?.role === "ADMIN" || details.data.role === "ADMIN") {
+        if (res.data.role == "ADMIN") {
             navigate("/admindashboard");
         } else {
             navigate("/userdashboard");

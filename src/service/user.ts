@@ -38,3 +38,18 @@ export const forgotPasswordRequest = async (email: string) => {
 export const resetPasswordRequest = async (token: string, password: string) => {
     return await api.post(`/users/reset-password/${token}`, { password });
 };
+
+export const getAllUsers = async () => {
+    const res = await api.get('/users/all_users')
+    return res.data
+}
+
+export const suspendUser = async (id: string) => {
+    const res = await api.patch(`/users/suspend_user/${id}`)
+    return res.data
+}
+
+export const activateUser = async (id: string) => {
+    const res = await api.patch(`/users/activate_user/${id}`)
+    return res.data
+}

@@ -42,3 +42,8 @@ export const getWeather = async (location: string) => {
     const res = await api.post('/trips/get_weather', { location: location })
     return res.data
 }
+
+export const getAllTrips = async () => {
+    const res = await api.get('/trips/all_trips')
+    return res.data
+}

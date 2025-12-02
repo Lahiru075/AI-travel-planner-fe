@@ -34,7 +34,6 @@ const Signup = () => {
             const data = { name, email, password, confirmPassword };
             const res: any = await register(data);
 
-            // alert(`Registration successful! Email: ${res.data.email}`); // Optional
             enqueueSnackbar('User registered successfully', { variant: 'success' });
             navigate('/login');
 
