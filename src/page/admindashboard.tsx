@@ -18,22 +18,30 @@ const AdminDashboard = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [tripPage, setTripPage] = useState(1);
+    const [totalTripPage, setTotalTripPage] = useState(1);
+
+    const [userPage, setUserPage] = useState(1);
+    const [totalUserPage, setTotalUserPage] = useState(1);
+
     useEffect(() => {
         loadData();
-    }, [activeTab]);
+    }, [activeTab, tripPage, userPage]);
 
     const loadData = async () => {
         setLoading(true);
         try {
             if (activeTab === "overview") {
                 const res = await getStats();
-                setStats(res.data); 
+                setStats(res.data);
             } else if (activeTab === "users") {
-                const res = await getAllUsers();
-                setUsers(res.data); 
+                const res = await getAllUsers(userPage, 5);
+                setUsers(res.data);
+                setTotalUserPage(res?.totalPages || 1);
             } else if (activeTab === "trips") {
-                const res = await getAllTrips();
-                setTrips(res.data); 
+                const res = await getAllTrips(tripPage, 5);
+                setTrips(res.data);
+                setTotalTripPage(res?.totalPages || 1);
             }
         } catch (error) {
             console.error("Failed to load data");
@@ -41,6 +49,12 @@ const AdminDashboard = () => {
             setLoading(false);
         }
     };
+
+    const handlePrevTripPage = () => { if (tripPage > 1) setTripPage(tripPage - 1); };
+    const handleNextTripPage = () => { if (tripPage < totalTripPage) setTripPage(tripPage + 1); };
+
+    const handlePrevUserPage = () => { if (userPage > 1) setUserPage(userPage - 1); };
+    const handleNextUserPage = () => { if (userPage < totalUserPage) setUserPage(userPage + 1); };
 
     // User Suspend/Activate Logic
     const handleUserStatus = async (id: string, currentStatus: string) => {
@@ -214,8 +228,8 @@ const AdminDashboard = () => {
                                                             <button
                                                                 onClick={() => handleUserStatus(u._id, u.status)}
                                                                 className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${u.status === 'ACTIVE'
-                                                                        ? 'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white'
-                                                                        : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white'
+                                                                    ? 'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white'
+                                                                    : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white'
                                                                     }`}
                                                             >
                                                                 {u.status === 'ACTIVE' ? "Suspend" : "Activate"}
@@ -226,6 +240,35 @@ const AdminDashboard = () => {
                                             ))}
                                         </tbody>
                                     </table>
+                                    {totalUserPage > 1 && (
+                                        <div className="flex justify-center items-center gap-6 mt-12 pb-8">
+                                            <button
+                                                onClick={handlePrevUserPage}
+                                                disabled={totalUserPage === 1}
+                                                className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-medium 
+                                    hover:bg-cyan-500/10 hover:border-cyan-500 hover:text-cyan-400 transition-all
+                                    disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                                                Previous
+                                            </button>
+
+                                            <span className="text-slate-400 font-medium">
+                                                Page <span className="text-white font-bold">{userPage}</span> of <span className="text-white font-bold">{totalUserPage}</span>
+                                            </span>
+
+                                            <button
+                                                onClick={handleNextUserPage}
+                                                disabled={userPage === totalTripPage}
+                                                className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-medium 
+                                    hover:bg-cyan-500/10 hover:border-cyan-500 hover:text-cyan-400 transition-all
+                                    disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                            >
+                                                Next
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
@@ -251,6 +294,36 @@ const AdminDashboard = () => {
                                             </button>
                                         </div>
                                     ))}
+
+                                    {totalTripPage > 1 && (
+                                        <div className="flex justify-center items-center gap-6 mt-12 pb-8">
+                                            <button
+                                                onClick={handlePrevTripPage}
+                                                disabled={tripPage === 1}
+                                                className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-medium 
+                                    hover:bg-cyan-500/10 hover:border-cyan-500 hover:text-cyan-400 transition-all
+                                    disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                                                Previous
+                                            </button>
+
+                                            <span className="text-slate-400 font-medium">
+                                                Page <span className="text-white font-bold">{tripPage}</span> of <span className="text-white font-bold">{totalTripPage}</span>
+                                            </span>
+
+                                            <button
+                                                onClick={handleNextTripPage}
+                                                disabled={tripPage === totalTripPage}
+                                                className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-medium 
+                                    hover:bg-cyan-500/10 hover:border-cyan-500 hover:text-cyan-400 transition-all
+                                    disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                            >
+                                                Next
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </>

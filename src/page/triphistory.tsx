@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { useSnackbar } from 'notistack';
 import { deleteTrip, getMyTrips } from "../service/trip";
 import TripCardItem from "../components/tripcarditem"; 
 
 const MyTrips = () => {
-    const navigate = useNavigate();
     const { user } = useAuth();
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,7 +16,7 @@ const MyTrips = () => {
 
     const { enqueueSnackbar } = useSnackbar();
 
-    // 🔄 Fetch Trips Logic
+    //  Fetch Trips Logic
     useEffect(() => {
         const fetchTrips = async () => {
             if (!user) return;

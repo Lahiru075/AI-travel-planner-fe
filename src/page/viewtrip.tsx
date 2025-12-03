@@ -16,8 +16,6 @@ const ViewTrip = () => {
                 const res = await getTripById(id!);
                 setTrip(res.data);
 
-                console.log(res.data.tripData.itinerary)
-
                 if (res.data.destination) {
                     GetPlacePhoto(res.data.destination);
                     fetchWeather(res.data.destination);

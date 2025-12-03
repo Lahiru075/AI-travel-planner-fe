@@ -39,8 +39,8 @@ export const resetPasswordRequest = async (token: string, password: string) => {
     return await api.post(`/users/reset-password/${token}`, { password });
 };
 
-export const getAllUsers = async () => {
-    const res = await api.get('/users/all_users')
+export const getAllUsers = async (page: number, limit: number) => {
+    const res = await api.get(`/users/all_users?page=${page}&limit=${limit}`)
     return res.data
 }
 

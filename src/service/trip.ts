@@ -43,7 +43,7 @@ export const getWeather = async (location: string) => {
     return res.data
 }
 
-export const getAllTrips = async () => {
-    const res = await api.get('/trips/all_trips')
+export const getAllTrips = async (page: number, limit: number) => {
+    const res = await api.get(`/trips/all_trips?page=${page}&limit=${limit}`)
     return res.data
 }

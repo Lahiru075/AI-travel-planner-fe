@@ -199,7 +199,6 @@ const CreateTrip = () => {
 
                         {/* SAVE BUTTON POSITIONING */}
                         {/* SAVE BUTTON POSITIONING */}
-                        {/* දැන් මේක කෙලින්ම Text එකට යටින්, මැදට (Center) එනවා */}
                         <div className="mt-8 flex justify-center relative z-20">
                             <button
                                 onClick={handleSaveTrip}
