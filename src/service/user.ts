@@ -53,3 +53,12 @@ export const activateUser = async (id: string) => {
     const res = await api.patch(`/users/activate_user/${id}`)
     return res.data
 }
+
+export const updateProfileRequest = async (data: any) => {
+    const res = await api.patch('/users/update_profile', data, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+    return res.data;
+}

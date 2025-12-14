@@ -16,6 +16,7 @@ const AdminLayout = lazy(() => import('../components/AdminLayout'))
 const ForgotPassword = lazy(() => import('../page/forgetpassword'))
 const ResetPassword = lazy(() => import('../page/resetpassword'))
 const Explore = lazy(() => import('../page/explore'))
+const UserProfile = lazy(() => import('../page/userprofile'))
 
 
 type RequireAuthType = { children: ReactNode, role?: string[] }
@@ -131,6 +132,15 @@ function index() {
               element={
                 <RequireAuth role={["USER"]}>
                   <Explore />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path='/profile'
+              element={
+                <RequireAuth role={["USER"]}>
+                  <UserProfile />
                 </RequireAuth>
               }
             />

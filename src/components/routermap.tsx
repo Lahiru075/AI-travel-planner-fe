@@ -2,7 +2,6 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Leaflet Icon Fix (Default icon එක නැතිවෙන ප්‍රශ්නය විසඳීමට)
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -16,13 +15,11 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const RouteMap = ({ itinerary }: { itinerary: any[] }) => {
-    
-    // Itinerary එකෙන් Coordinates තියෙන තැන් ටික එකතු කරගන්නවා
+
     const locations = itinerary?.flatMap(day => day.plan).filter(place => place.geoCoordinates);
 
     if (!locations || locations.length === 0) return null;
 
-    // Map එකේ මැද ලක්ෂ්‍යය (පළමු ස්ථානය)
     const centerPosition = [locations[0].geoCoordinates.lat, locations[0].geoCoordinates.lng];
 
     return (
