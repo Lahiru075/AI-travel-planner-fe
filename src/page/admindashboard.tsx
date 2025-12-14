@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { getStats } from "../service/admin";
+import Swal from 'sweetalert2';
 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { activateUser, getAllUsers, suspendUser } from "../service/user";
@@ -12,7 +13,13 @@ const AdminDashboard = () => {
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
 
-    const [activeTab, setActiveTab] = useState("overview");
+    // const [activeTab, setActiveTab] = useState("overview");
+
+    //  Lazy Initialization => meka rerender wenkota aya run wenne nehe.. eka parai run wenne... behei refresh karaddi aya run wenawa... monka app ayama aya run wena nisa...
+    const [activeTab, setActiveTab] = useState(() => {
+        return localStorage.getItem("activeTab") || "overview";
+    });
+
     const [stats, setStats] = useState<any>(null);
     const [users, setUsers] = useState([]);
     const [trips, setTrips] = useState([]);
@@ -23,6 +30,11 @@ const AdminDashboard = () => {
 
     const [userPage, setUserPage] = useState(1);
     const [totalUserPage, setTotalUserPage] = useState(1);
+
+    // page eka refreash kala kiyala overview ekata yanne nehe... denata inna page eka local storage eke save wenwa.... tab ekata giya gaman ethkota refresh kala kiyla overview ekata yanne nehe...
+    useEffect(() => {
+        localStorage.setItem("activeTab", activeTab);
+    }, [activeTab]);
 
     useEffect(() => {
         loadData();
@@ -74,20 +86,40 @@ const AdminDashboard = () => {
 
     // Trip Delete Logic
     const handleDeleteTrip = async (id: string) => {
-        if (!window.confirm("Delete this trip permanently?")) return;
-        try {
-            await deleteTrip(id);
-            enqueueSnackbar("Trip deleted", { variant: "success" });
-            setTrips(trips.filter((t: any) => t._id !== id));
-        } catch (error) {
-            enqueueSnackbar("Delete failed", { variant: "error" });
+
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444', // Red (Delete)
+            cancelButtonColor: '#3b82f6', // Blue (Cancel)
+            confirmButtonText: 'Yes, delete it!',
+
+            background: '#0f172a',
+            color: '#ffffff',
+            iconColor: '#f87171'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await deleteTrip(id);
+
+                enqueueSnackbar('Trip deleted successfully!', { variant: 'success' });
+
+                setTrips(trips.filter((t: any) => t._id !== id));
+
+            } catch (error) {
+                enqueueSnackbar('Failed to delete trip!', { variant: 'error' });
+            }
         }
+
     };
 
     return (
         <div className="min-h-screen bg-slate-950 flex font-sans text-slate-200">
 
-            {/* 🟢 SIDEBAR */}
+            {/* SIDEBAR */}
             <aside className="w-64 bg-slate-900 border-r border-slate-800 p-6 flex flex-col fixed h-full z-20">
                 <div className="flex items-center gap-3 mb-10">
                     <div className="bg-blue-600 p-2 rounded-lg text-white">🛡️</div>
@@ -244,7 +276,7 @@ const AdminDashboard = () => {
                                         <div className="flex justify-center items-center gap-6 mt-12 pb-8">
                                             <button
                                                 onClick={handlePrevUserPage}
-                                                disabled={totalUserPage === 1}
+                                                disabled={userPage === 1}
                                                 className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-medium 
                                     hover:bg-cyan-500/10 hover:border-cyan-500 hover:text-cyan-400 transition-all
                                     disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
@@ -259,7 +291,7 @@ const AdminDashboard = () => {
 
                                             <button
                                                 onClick={handleNextUserPage}
-                                                disabled={userPage === totalTripPage}
+                                                disabled={userPage === totalUserPage}
                                                 className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-medium 
                                     hover:bg-cyan-500/10 hover:border-cyan-500 hover:text-cyan-400 transition-all
                                     disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"

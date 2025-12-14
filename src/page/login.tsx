@@ -80,8 +80,8 @@ const Login = () => {
     const handleGoogleLogin = async (credentialResponse: any) => {
         setLoading(true);
         try {
-            const token = credentialResponse.credential;
-            const res: any = await googleAuth(token);
+            const token = credentialResponse.credential; // google eken dunna id eka gannawa..
+            const res: any = await googleAuth(token); // token ekath ekkama backend ekata yawanawa..
             await processLogin(res);
         } catch (error: any) {
             console.error("Google Login Error", error);
@@ -96,7 +96,7 @@ const Login = () => {
 
         const details = await getMyDetails();
 
-        if (details.data.status === "SUSPEND") {
+        if (details.data.status == "SUSPEND") {
             enqueueSnackbar('Your account is suspended!', { variant: 'error' });
             setLoading(false);
             return;

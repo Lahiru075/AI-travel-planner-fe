@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getImage, getTripById, getWeather } from "../service/trip";
+import { getImage, getTripById, getWeather, togglePublishTrip } from "../service/trip";
 import RouteMap from "../components/routermap";
+import { useSnackbar } from 'notistack'
 
 const ViewTrip = () => {
     const { id } = useParams();
@@ -9,6 +10,7 @@ const ViewTrip = () => {
     const [loading, setLoading] = useState(true);
     const [headerImage, setHeaderImage] = useState("");
     const [weather, setWeather] = useState<any>(null);
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         const fetchTrip = async () => {
@@ -84,6 +86,16 @@ const ViewTrip = () => {
         return "🎒 Pack your standard travel essentials.";
     };
 
+    const handlePublish = async () => {
+        try {
+            await togglePublishTrip(trip._id);
+            setTrip({ ...trip, isPublic: !trip.isPublic });
+            enqueueSnackbar(`Trip is now ${!trip.isPublic ? "Public 🌍" : "Private 🔒"}`, { variant: 'success' });
+        } catch (error) {
+            console.error("Error updating status");
+        }
+    };
+
 
     const handlePrint = () => {
         window.print();
@@ -100,8 +112,6 @@ const ViewTrip = () => {
             <div className="max-w-5xl mx-auto relative z-10 animate-fade-in-up">
 
                 <div className="flex justify-between items-center mb-6">
-                    <div></div>
-
                     <button
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-all shadow-sm active:scale-95 print:hidden"
@@ -109,6 +119,17 @@ const ViewTrip = () => {
                         <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         Download PDF
                     </button>
+
+                    <button
+                        onClick={handlePublish}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all shadow-sm active:scale-95 print:hidden mr-3 ${trip.isPublic
+                                ? "bg-purple-600/20 text-purple-400 border-purple-500 hover:bg-purple-600/30"
+                                : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700"
+                            }`}
+                    >
+                        <span>{trip.isPublic ? "🌍 Public" : "🔒 Private"}</span>
+                    </button>
+
                 </div>
 
                 <div className="relative overflow-hidden rounded-3xl border border-slate-800 p-8 md:p-12 mb-12 text-center shadow-2xl min-h-[450px] flex flex-col justify-center items-center group">

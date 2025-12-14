@@ -303,6 +303,9 @@ const Navbar = () => {
             <Link to="/triphistory" className={getNavLinkClass("/triphistory")}>
               History
             </Link>
+            <Link to="/explore" className={getNavLinkClass("/explore")}>
+              Explore
+            </Link>
           </div>
 
           {/* 3. RIGHT SIDE - USER PROFILE */}

@@ -72,7 +72,7 @@ const CreateTrip = () => {
             await saveTrip(data);
             enqueueSnackbar('Trip saved successfully!', { variant: 'success' });
 
-            navigate('/userdashboard');
+            navigate('/triphistory');
 
         } catch (error) {
             enqueueSnackbar('Failed to save trip. Please try again!', { variant: 'error' });
@@ -100,7 +100,7 @@ const CreateTrip = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleGenerateTrip} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <form className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                     {/* Destination */}
                     <div className="col-span-2">
@@ -161,10 +161,11 @@ const CreateTrip = () => {
                         </div>
                     </div>
 
-                    {/* Submit Button */}
+                    {/* Generate Button */}
                     <div className="col-span-2 mt-6">
                         <button
                             disabled={loading}
+                            onClick={handleGenerateTrip}
                             className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-4 rounded-xl font-bold text-xl hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all transform hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-3"
                         >
                             {loading ? (
@@ -198,7 +199,6 @@ const CreateTrip = () => {
                         </div>
 
                         {/* SAVE BUTTON POSITIONING */}
-                        {/* SAVE BUTTON POSITIONING */}
                         <div className="mt-8 flex justify-center relative z-20">
                             <button
                                 onClick={handleSaveTrip}
@@ -224,7 +224,7 @@ const CreateTrip = () => {
                                         <span>Saving...</span>
                                     </>
                                 ) : (
-                                    // Normal State
+                                    
                                     <>
                                         <span className="text-lg">Save Trip</span>
                                         <span className="bg-slate-200 text-slate-900 p-1.5 rounded-full group-hover/btn:bg-slate-900 group-hover/btn:text-white transition-colors">
@@ -272,7 +272,7 @@ const CreateTrip = () => {
 
                         <div className="space-y-12">
                             {tripData.itinerary.map((dayPlan: any, index: number) => (
-                                <div key={index} className={`relative flex flex-col md:flex-row gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                                <div key={index} className={`relative flex flex-col gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
 
                                     {/* Empty side for layout balance */}
                                     <div className="hidden md:block flex-1"></div>

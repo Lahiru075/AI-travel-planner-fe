@@ -9,7 +9,7 @@ const ResetPassword = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [password, setPassword] = useState("");
 
-    const handleSubmit = async (e: any) => {
+    const updatePassword = async (e: any) => {
         e.preventDefault();
         try {
             if (token) {
@@ -26,7 +26,7 @@ const ResetPassword = () => {
         <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
             <div className="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 w-full max-w-md">
                 <h2 className="text-2xl font-bold text-white mb-4">New Password</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form className="space-y-4">
                     <input 
                         type="password" 
                         placeholder="Enter new password"
@@ -35,7 +35,7 @@ const ResetPassword = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button className="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-500 transition">
+                    <button className="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-500 transition" onClick={updatePassword}>
                         Update Password
                     </button>
                 </form>

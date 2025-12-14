@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
 import Layout from '../components/Layout'
 
+
 const Signup = lazy(() => import('../page/signup'))
 const Login = lazy(() => import('../page/login'))
 const Userdashboard = lazy(() => import('../page/userdashboard'))
@@ -14,6 +15,7 @@ const HomePage = lazy(() => import('../page/homepage'))
 const AdminLayout = lazy(() => import('../components/AdminLayout'))
 const ForgotPassword = lazy(() => import('../page/forgetpassword'))
 const ResetPassword = lazy(() => import('../page/resetpassword'))
+const Explore = lazy(() => import('../page/explore'))
 
 
 type RequireAuthType = { children: ReactNode, role?: string[] }
@@ -22,7 +24,15 @@ const RequireAuth = ({ children, role }: RequireAuthType) => {
   const { user, loading } = useAuth()
 
   if (loading) {
-    return
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950">
+        {/* Spinner with Glow */}
+        <div className="w-16 h-16 border-4 border-slate-800 border-t-cyan-400 rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.3)]"></div>
+
+        {/* Loading Text */}
+        <p className="mt-4 text-slate-400 text-sm font-medium animate-pulse">Loading...</p>
+      </div>
+    )
   }
 
   if (!user) {
@@ -51,7 +61,7 @@ const RequireAuth = ({ children, role }: RequireAuthType) => {
 
 function index() {
   return (
-    <BrowserRouter>
+    <BrowserRouter>      
       <Suspense fallback={
         <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950">
           {/* Spinner with Glow */}
@@ -112,6 +122,15 @@ function index() {
               element={
                 <RequireAuth role={["USER"]}>
                   <TripHistory />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path='/explore'
+              element={
+                <RequireAuth role={["USER"]}>
+                  <Explore />
                 </RequireAuth>
               }
             />

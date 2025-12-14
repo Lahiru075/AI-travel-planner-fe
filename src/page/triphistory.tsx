@@ -3,26 +3,25 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { useSnackbar } from 'notistack';
 import { deleteTrip, getMyTrips } from "../service/trip";
-import TripCardItem from "../components/tripcarditem"; 
+import TripCardItem from "../components/tripcarditem";
+import Swal from 'sweetalert2';
 
 const MyTrips = () => {
     const { user } = useAuth();
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Pagination States
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
 
     const { enqueueSnackbar } = useSnackbar();
 
-    //  Fetch Trips Logic
     useEffect(() => {
         const fetchTrips = async () => {
             if (!user) return;
             setLoading(true);
             try {
-                const res = await getMyTrips(page, 6); 
+                const res = await getMyTrips(page, 6);
                 setTrips(res.data);
                 setTotalPage(res?.totalPages || 1);
             } catch (error) {
@@ -36,15 +35,31 @@ const MyTrips = () => {
     }, [user, page]);
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this trip?")) return;
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444', // Red (Delete)
+            cancelButtonColor: '#3b82f6', // Blue (Cancel)
+            confirmButtonText: 'Yes, delete it!',
 
-        try {
-            await deleteTrip(id);
-            enqueueSnackbar('Trip deleted successfully!', { variant: 'success' });
-            
-            setTrips(trips.filter((t: any) => t._id !== id));
-        } catch (error) {
-            enqueueSnackbar('Failed to delete trip!', { variant: 'error' });
+            background: '#0f172a',
+            color: '#ffffff',
+            iconColor: '#f87171'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await deleteTrip(id);
+
+                enqueueSnackbar('Trip deleted successfully!', { variant: 'success' });
+
+                setTrips(trips.filter((t: any) => t._id !== id));
+
+            } catch (error) {
+                enqueueSnackbar('Failed to delete trip!', { variant: 'error' });
+            }
         }
     };
 
@@ -94,10 +109,10 @@ const MyTrips = () => {
                         {/* ✅ Trips Grid with Image Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                             {trips.map((trip: any) => (
-                                <TripCardItem 
-                                    key={trip._id} 
-                                    trip={trip} 
-                                    handleDelete={handleDelete} 
+                                <TripCardItem
+                                    key={trip._id}
+                                    trip={trip}
+                                    handleDelete={handleDelete}
                                 />
                             ))}
                         </div>
