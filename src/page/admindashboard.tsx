@@ -15,7 +15,7 @@ const AdminDashboard = () => {
 
     // const [activeTab, setActiveTab] = useState("overview");
 
-    //  Lazy Initialization => meka rerender wenkota aya run wenne nehe.. eka parai run wenne... behei refresh karaddi aya run wenawa... monka app ayama aya run wena nisa...
+    //  Lazy Initialization => meka rerender wenkota aya run wenne nehe.. eka parai run wenne... behei refresh karaddi aya run wenawa... monda app aya run wena nisa...
     const [activeTab, setActiveTab] = useState(() => {
         return localStorage.getItem("activeTab") || "overview";
     });
@@ -143,7 +143,7 @@ const AdminDashboard = () => {
                 </button>
             </aside>
 
-            {/* 🟢 MAIN CONTENT */}
+            {/* MAIN CONTENT */}
             <main className="flex-1 ml-64 p-8 md:p-12 bg-slate-950 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-3xl font-bold text-white mb-8 capitalize">{activeTab}</h2>
