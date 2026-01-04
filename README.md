@@ -116,8 +116,9 @@ src/
 ├── components/     # Reusable UI components (Navbar, TripCard, Map, etc.)
 ├── context/        # Auth Context for global state management
 ├── pages/          # Main application pages (Home, Dashboard, CreateTrip, Admin)
+├── routes/         # App navigation & protected route logic (index.tsx)
 ├── service/        # API service functions (Axios calls to Backend)
-├── App.tsx         # Main routing logic
+├── App.tsx         # Root component
 └── main.tsx        # Entry point
 ```
 
