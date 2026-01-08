@@ -4,6 +4,7 @@
 
 ## 🚀 Live Demo
 **Frontend URL:** [[Link to your Vercel Deployment](https://ai-travel-planner-fe.vercel.app/)]
+
 **Backend Repository:** [[Link to Backend GitHub Repo](https://github.com/Lahiru075/AI-travel-planner-be.git)]
 
 ---
