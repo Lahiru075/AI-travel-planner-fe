@@ -3,7 +3,7 @@
 > A modern, AI-powered travel itinerary generator built with React, TypeScript, and Tailwind CSS. It features a stunning dark glassmorphism UI, interactive maps, and a comprehensive user dashboard.
 
 ## 🚀 Live Demo
-**Frontend URL:** [Link to your Vercel Deployment]
+**Frontend URL:** [[Link to your Vercel Deployment](https://ai-travel-planner-fe.vercel.app/)]
 **Backend Repository:** [[Link to Backend GitHub Repo](https://github.com/Lahiru075/AI-travel-planner-be.git)]
 
 ---
