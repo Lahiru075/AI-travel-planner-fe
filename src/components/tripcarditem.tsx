@@ -24,6 +24,7 @@ const TripCardItem = ({ trip, handleDelete }: TripCardProps) => {
                     }
                 } catch (error) {
                     console.log("Image load failed for:", trip.destination);
+                    console.log(isLoadingImage);
                 } finally {
                     setIsLoadingImage(false);
                 }

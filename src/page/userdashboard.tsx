@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { getMyTrips } from "../service/trip";
 
 const UserDashboard = () => {
@@ -98,7 +98,7 @@ const UserDashboard = () => {
                         itemStyle={{ color: '#4ade80' }}
                       />
                       <Bar dataKey="days" radius={[6, 6, 0, 0]} barSize={40}>
-                        {chartData.map((entry: any, index: number) => (
+                        {chartData.map((_, index: number) => (
                           <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "#3b82f6" : "#06b6d4"} />
                         ))}
                       </Bar>

@@ -33,6 +33,7 @@ const Signup = () => {
         try {
             const data = { name, email, password, confirmPassword };
             const res: any = await register(data);
+            console.log(res)
 
             enqueueSnackbar('User registered successfully', { variant: 'success' });
             navigate('/login');

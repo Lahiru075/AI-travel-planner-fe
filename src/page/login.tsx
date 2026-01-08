@@ -15,6 +15,8 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
+    
+
     // const handleLogin = async (e: FormEvent) => {
     //     e.preventDefault();
     //     setLoading(true);
@@ -72,6 +74,7 @@ const Login = () => {
             await processLogin(res);
         } catch (error: any) {
             console.log(error);
+            console.log(user);
             enqueueSnackbar(error.response?.data?.message || "Login Failed", { variant: 'error' });
             setLoading(false);
         }
